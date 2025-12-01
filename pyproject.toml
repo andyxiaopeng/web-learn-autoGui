@@ -1,0 +1,12 @@
+[project]
+name = "autoclick"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "opencv-python>=4.8.0",
+    "pyautogui>=0.9.54",
+    "numpy>=1.24.0",
+    "pillow>=10.0.0"
+]
