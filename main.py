@@ -89,6 +89,22 @@ class AutoClicker:
         screenshot_cv = cv2.cvtColor(np.array(screenshot), cv2.COLOR_RGB2BGR)
         return screenshot_cv
     
+    def random_mouse_move(self):
+        """随机移动鼠标防止屏幕保护"""
+        # 获取屏幕尺寸
+        screen_width, screen_height = pyautogui.size()
+        
+        # 生成随机位置（避免屏幕边缘）
+        margin = 50
+        random_x = random.randint(margin, screen_width - margin)
+        random_y = random.randint(margin, screen_height - margin)
+        
+        # 随机移动速度
+        duration = random.uniform(0.5, 1.5)
+        
+        print(f"随机移动鼠标到位置: ({random_x}, {random_y})")
+        pyautogui.moveTo(random_x, random_y, duration=duration)
+    
     def run(self, mode="test", threshold=0.8, loop=True, interval=2.0, max_attempts=None, offset_x=0, offset_y=0):
         """
         运行自动点击程序
@@ -124,6 +140,9 @@ class AutoClicker:
                     print(f"已达到最大尝试次数 {max_attempts}，程序退出")
                     break
                 
+                # 检测前随机移动鼠标防止屏幕保护
+                self.random_mouse_move()
+                
                 if mode == "test":
                     # 测试模式：使用现有截图
                     if attempt_count == 1:
@@ -154,6 +173,9 @@ class AutoClicker:
                         self.click_target(x, y, offset_x, offset_y)
                         # self.move_target(x, y, offset_x, offset_y)      # 测试使用
                         
+                        # 检测后随机移动鼠标防止屏幕保护
+                        self.random_mouse_move()
+                        
                         # 点击后等待一段时间再继续
                         if loop:
                             print(f"点击完成，等待 {interval_p} 秒后继续检查...")
@@ -162,6 +184,8 @@ class AutoClicker:
                             break
                     else:
                         print("测试模式：仅显示位置，不执行点击")
+                        # 检测后随机移动鼠标防止屏幕保护
+                        self.random_mouse_move()
                         if not loop:
                             break
                         else:
@@ -169,6 +193,8 @@ class AutoClicker:
                             time.sleep(interval_p)
                 else:
                     print(f"未找到目标，最高匹配度: {confidence:.3f}")
+                    # 未找到目标时也随机移动鼠标防止屏幕保护
+                    self.random_mouse_move()
                     if not loop:
                         print("建议:")
                         print("1. 检查目标图片是否正确")
